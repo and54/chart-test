@@ -6,7 +6,7 @@
       :height="height"
       :dataFormat="dataFormat"
       :dataSource="dataSource"
-      @drawComplete="chartLoaded()"
+      @drawComplete="cylinderLoaded()"
       :style="chartStyle"
     />
     <mask :id="maskId" />
@@ -17,46 +17,54 @@
 import { randomName } from '@/utils';
 
 export default {
-  name: "FusionChartsBars",
+  name: "FusionChartsCylinder",
   props: {
     dataSource: Object
   },
   data: () => ({
-    type: "column2d",
+    type: "cylinder",
     renderAt: randomName(),
     width: 550,
     height: 350,
     dataFormat: "json",
     chartStyle: "opacity: 0",
-    maskId:randomName(),
+    maskId: randomName(),
+    appliedImg: false,
   }),
   methods: {
-    chartLoaded() {
+    cylinderLoaded() {
+      if (this.appliedImg) return;
+
       const cont = document.getElementById(this.renderAt);
       const g = [...cont.querySelectorAll("g")].find(g => {
         const c = g.className.animVal;
-        return c && !!(c.indexOf('-plot-group') + 1) && !(c.indexOf('-error') + 1)
+        return c && !!(c.indexOf('-cylinder') + 1) && !(c.indexOf('-error') + 1)
       });
-      const parent = g.parentElement;
+
+      const path = g.querySelectorAll("path");
       const mask = cont.querySelectorAll(`#${this.maskId}`)[0];
 
-      if (parent === mask) return;
+      if (g === mask) return;
 
-      g.classList.add('full-fill')
-      mask.appendChild(g);
-      parent.appendChild(mask);
+      mask.classList.add('full-fill');
+      mask.appendChild(path[4]);
+      mask.appendChild(path[2]);
+      g.appendChild(mask);
+      g.insertBefore(mask, path[0])
       
       const img = [...cont.querySelectorAll("image")].find(i => i.href.animVal === this.dataSource.chart.bgImage);
       img.setAttribute('mask', `url(#${this.maskId})`);
 
       this.chartStyle = null;
+      this.appliedImg = true;
     },
+    rounded: () => Math.round(Math.random() * 1000),
   },
 };
 </script>
 
 <style lang="scss">
-.full-fill rect {
-  fill: white;
+.full-fill * {
+  fill: white !important;
 }
 </style>

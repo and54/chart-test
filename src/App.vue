@@ -1,12 +1,13 @@
 <template>
   <div id="app">
-    <round-graph 
-      :due-value="20.50" 
-      :new-value="60.10" 
-      :show-values="true" 
+    <round-graph
+      :due-value="20.5"
+      :new-value="60.1"
+      :show-values="true"
       due-title="Due (01/10/2021)"
       new-title="Total Balance"
     />
+    <e-g-cylinder :dataSource="cylinderData" />
     <e-g-charts :dataSource="dataSource" />
     <button @click="changeBg('/assets/water2.jpg')">water</button>
     <button @click="changeBg('/assets/money1.jpg')">money</button>
@@ -14,8 +15,9 @@
 </template>
 
 <script>
-import RoundGraph from './components/RoundGraph.vue';
-import EGCharts from './components/Charts';
+import RoundGraph from "./components/RoundGraph.vue";
+import EGCharts from "./components/Charts";
+import EGCylinder from './components/CylinderChart.vue';
 
 const chartData = [
   {
@@ -59,27 +61,47 @@ const dataSource = {
     yaxisname: "Reserves (MMbbl)",
     numbersuffix: "K",
     theme: "fusion",
-    bgImage: '/assets/water1.jpg'
+    bgImage: "/assets/water1.jpg",
   },
   data: chartData,
 };
 
+const cylinderData = {
+  chart: {
+    caption: "Fuel Meter",
+    subcaption: "Diesel level in generator Bakersfield Central",
+    subcaptionFontBold: 0,
+    lowerLimit: 0,
+    upperLimit: 120,
+    lowerLimitDisplay: "Empty",
+    upperLimitDisplay: "Full",
+    numberSuffix: " ltrs",
+    showhovereffect: 1,
+    theme: "fusion",
+    bgImage: "/assets/water1.jpg",
+  },
+  value: 80,
+};
+
 export default {
-  name: 'App',
+  name: "App",
   components: {
     RoundGraph,
-    EGCharts
+    EGCharts,
+    EGCylinder,
   },
   data: () => ({
     dataSource,
+    cylinderData,
   }),
   methods: {
     changeBg(img) {
-      this.dataSource.chart.bgImage = img;
+      this.cylinderData.chart.bgImage = this.dataSource.chart.bgImage = img;
       this.dataSource = { ...this.dataSource };
-    }
-  }
-}
+      this.cylinderData = { ...this.cylinderData };
+    },
+  },
+};
 </script>
 
 <style>
