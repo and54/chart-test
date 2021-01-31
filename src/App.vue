@@ -7,7 +7,7 @@
       due-title="Due (01/10/2021)"
       new-title="Total Balance"
     />
-    <e-g-cylinder :dataSource="cylinderData" />
+    <multi-cylinder :dataSource="cylinderData" />
     <e-g-charts :dataSource="dataSource" />
     <button @click="changeBg('/assets/water2.jpg')">water</button>
     <button @click="changeBg('/assets/money1.jpg')">money</button>
@@ -17,7 +17,7 @@
 <script>
 import RoundGraph from "./components/RoundGraph.vue";
 import EGCharts from "./components/Charts";
-import EGCylinder from './components/CylinderChart.vue';
+import MultiCylinder from './components/MultiCylinder.vue';
 
 const chartData = [
   {
@@ -68,8 +68,6 @@ const dataSource = {
 
 const cylinderData = {
   chart: {
-    caption: "Fuel Meter",
-    subcaption: "Diesel level in generator Bakersfield Central",
     subcaptionFontBold: 0,
     lowerLimit: 0,
     upperLimit: 120,
@@ -79,8 +77,10 @@ const cylinderData = {
     showhovereffect: 1,
     theme: "fusion",
     bgImage: "/assets/water1.jpg",
+    cylradius: 50,
   },
-  value: 80,
+  captions: ["Name 1", "Name 2", "3rd Name"],
+  values: [80, 105, 48],
 };
 
 export default {
@@ -88,7 +88,7 @@ export default {
   components: {
     RoundGraph,
     EGCharts,
-    EGCylinder,
+    MultiCylinder,
   },
   data: () => ({
     dataSource,

@@ -29,9 +29,12 @@ export default {
     dataFormat: "json",
     chartStyle: "opacity: 0",
     maskId:randomName(),
+    appliedImg: false,
   }),
   methods: {
     chartLoaded() {
+      if (this.appliedImg) return;
+
       const cont = document.getElementById(this.renderAt);
       const g = [...cont.querySelectorAll("g")].find(g => {
         const c = g.className.animVal;
@@ -50,6 +53,7 @@ export default {
       img.setAttribute('mask', `url(#${this.maskId})`);
 
       this.chartStyle = null;
+      this.appliedImg = true;
     },
   },
 };
